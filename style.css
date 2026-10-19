@@ -1,0 +1,2112 @@
+/* =========================================================
+   RUUMAA — STYLE.CSS
+   HTML → CSS → JavaScript
+
+   Interaksi memakai class yang nanti diatur script.js:
+   .is-scrolled       : header setelah halaman digulir
+   .is-scroll-locked  : mengunci halaman ketika dialog terbuka
+   .reveal-ready      : elemen siap diberi animasi masuk
+   .is-visible        : elemen sudah terlihat
+   ========================================================= */
+
+
+/* =========================================================
+   01. WARNA, FONT, DAN UKURAN DASAR
+   ========================================================= */
+
+:root {
+  color-scheme: light;
+
+  --color-paper: #fffef8;
+  --color-yellow: #ffd43b;
+  --color-yellow-hover: #f3c529;
+  --color-ink: #20201c;
+  --color-muted: #66645b;
+  --color-soft: #f3f0e7;
+  --color-line: #dedbd0;
+  --color-white: #ffffff;
+  --color-focus: #705400;
+
+  --font-heading: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", Arial, Helvetica, sans-serif;
+
+  --container-width: 1280px;
+  --page-gutter: clamp(20px, 4.5vw, 80px);
+  --section-space: clamp(80px, 10vw, 156px);
+  --header-height: 96px;
+
+  --radius-small: 4px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-fast: 180ms;
+  --transition-normal: 300ms;
+}
+
+
+/* =========================================================
+   02. RESET DAN AKSESIBILITAS
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 24px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* JS dapat memberi class ini pada html dan body. */
+html.is-scroll-locked,
+body.is-scroll-locked {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+main,
+section,
+header,
+footer,
+nav,
+figure,
+div {
+  min-width: 0;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-ink);
+  font-family: var(--font-heading);
+  font-weight: 400;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.75rem, 5.2vw, 5.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+}
+
+h2 {
+  font-size: clamp(2.25rem, 4.5vw, 4.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+h3 {
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.25em;
+  -webkit-tap-highlight-color: rgb(255 212 59 / 30%);
+}
+
+button {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgb(255 212 59 / 30%);
+}
+
+a,
+button {
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+address {
+  font-style: normal;
+}
+
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+/* Jangan sampai display:flex/grid membuat elemen hidden muncul. */
+[hidden] {
+  display: none !important;
+}
+
+/* Dialog tetap tersembunyi sebelum JS memanggil showModal(). */
+dialog:not([open]) {
+  display: none;
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 5px;
+}
+
+section[id],
+main[id] {
+  scroll-margin-top: calc(var(--header-height) + 24px);
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  padding: 10px 18px;
+  transform: translateY(-160%);
+  border: 2px solid var(--color-ink);
+  background: var(--color-yellow);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   03. LAYOUT DAN KOMPONEN BERSAMA
+   ========================================================= */
+
+.container {
+  width: min(
+    var(--container-width),
+    calc(100% - var(--page-gutter) * 2)
+  );
+  margin-inline: auto;
+}
+
+.section-space {
+  padding-block: var(--section-space);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--color-muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.65;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.eyebrow > span:first-child:not(.status-dot) {
+  color: var(--color-ink);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: var(--color-yellow);
+  box-shadow: 0 0 0 4px rgb(255 212 59 / 18%);
+}
+
+.section-heading {
+  max-width: 850px;
+  margin-bottom: clamp(32px, 5vw, 72px);
+}
+
+.section-heading .eyebrow {
+  margin-bottom: 22px;
+}
+
+.section-heading h2 + p {
+  max-width: 430px;
+  margin-top: 24px;
+  color: var(--color-muted);
+}
+
+.section-heading--split {
+  display: flex;
+  max-width: none;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 36px;
+}
+
+.section-heading--split > p {
+  max-width: 240px;
+  padding-bottom: 6px;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.button {
+  display: inline-flex;
+  min-height: 52px;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-small);
+  padding: 14px 22px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+  transition:
+    background-color var(--transition-fast) ease,
+    border-color var(--transition-fast) ease,
+    transform var(--transition-fast) ease;
+}
+
+.button > span[aria-hidden] {
+  flex-shrink: 0;
+  font-size: 1.15rem;
+}
+
+.button--primary {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+.button--text {
+  border-color: var(--color-line);
+  background: transparent;
+  color: var(--color-ink);
+}
+
+.text-link {
+  display: inline-flex;
+  min-height: 44px;
+  max-width: 100%;
+  align-items: center;
+  gap: 16px;
+  padding-block: 8px;
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-decoration-thickness: 1px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: text-decoration-color var(--transition-fast) ease;
+}
+
+.text-link span {
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   04. LOGO DAN FOTO
+   ========================================================= */
+
+/* Logo asli selalu utuh, tanpa crop, filter, atau rotasi. */
+.brand {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  width: 64px;
+  height: auto;
+  aspect-ratio: 1536 / 1501;
+  object-fit: contain;
+  object-position: center;
+}
+
+/*
+   Semua foto memakai proporsi asli.
+   Tidak diberi tinggi tetap + object-fit:cover yang berisiko
+   memotong tulisan bawaan atau wajah pengunjung.
+*/
+.photo-frame {
+  overflow: hidden;
+  background: var(--color-soft);
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: opacity var(--transition-normal) ease;
+}
+
+.photo--facade {
+  object-position: center center;
+}
+
+.photo--daytime {
+  object-position: center top;
+}
+
+.photo--coffee {
+  object-position: center center;
+}
+
+.photo--drinks {
+  object-position: center bottom;
+}
+
+.photo--trees {
+  object-position: center center;
+}
+
+figcaption {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.65;
+}
+
+.photo-index {
+  flex-shrink: 0;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   05. HEADER
+   ========================================================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid transparent;
+  background: var(--color-paper);
+  transition:
+    border-color var(--transition-normal) ease,
+    box-shadow var(--transition-normal) ease;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: var(--color-line);
+  background: var(--color-paper);
+  box-shadow: 0 5px 24px rgb(32 32 28 / 4%);
+}
+
+.site-header__inner {
+  display: flex;
+  min-height: var(--header-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.site-header__note {
+  margin-left: auto;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.menu-toggle,
+.menu-close {
+  display: inline-flex;
+  min-width: 48px;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  padding: 10px 18px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition:
+    background-color var(--transition-fast) ease,
+    border-color var(--transition-fast) ease;
+}
+
+.menu-toggle__icon {
+  position: relative;
+  display: block;
+  width: 23px;
+  height: 20px;
+}
+
+.menu-toggle__icon span {
+  position: absolute;
+  left: 0;
+  width: 23px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    top var(--transition-normal) var(--ease-out),
+    transform var(--transition-normal) var(--ease-out);
+}
+
+.menu-toggle__icon span:first-child {
+  top: 6px;
+}
+
+.menu-toggle__icon span:last-child {
+  top: 13px;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon span:first-child {
+  top: 9px;
+  transform: rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon span:last-child {
+  top: 9px;
+  transform: rotate(-45deg);
+}
+
+/* Navigasi cadangan tetap nyaman digunakan tanpa JavaScript. */
+.basic-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  padding-bottom: 12px;
+}
+
+.basic-navigation a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding-block: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   06. PANEL NAVIGASI
+   ========================================================= */
+
+.navigation-panel {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  padding: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.navigation-panel::backdrop {
+  background: rgb(32 32 28 / 35%);
+}
+
+.navigation-panel__inner {
+  display: flex;
+  width: min(
+    var(--container-width),
+    calc(100% - var(--page-gutter) * 2)
+  );
+  min-height: 100%;
+  flex-direction: column;
+  margin-inline: auto;
+  padding-top: 24px;
+  padding-bottom: max(32px, env(safe-area-inset-bottom));
+}
+
+.navigation-panel__top {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.panel-navigation {
+  display: grid;
+  gap: 5px;
+  margin-block: auto;
+  padding-block: clamp(32px, 6vh, 72px);
+}
+
+.panel-navigation a {
+  display: flex;
+  min-height: 56px;
+  align-items: baseline;
+  gap: clamp(18px, 3vw, 44px);
+  padding-block: 5px;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5.7vw, 5rem);
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
+  transition: color var(--transition-fast) ease;
+}
+
+.panel-navigation a > span {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.navigation-panel__bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+
+.navigation-panel__bottom p:not(.eyebrow) {
+  margin-top: 6px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.navigation-panel__contact {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.navigation-panel__contact a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding-block: 8px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   07. HERO
+   ========================================================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.02fr);
+  min-height: min(800px, calc(100svh - var(--header-height)));
+  align-items: center;
+  gap: clamp(28px, 4vw, 64px);
+  padding-top: clamp(36px, 5vw, 72px);
+  padding-bottom: clamp(60px, 7vw, 112px);
+}
+
+.hero__copy {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__copy .eyebrow {
+  margin-bottom: 30px;
+}
+
+.hero h1 {
+  max-width: 11em;
+}
+
+.hero h1 em {
+  font-weight: 400;
+}
+
+.hero__description {
+  max-width: 330px;
+  margin-top: 28px;
+  color: var(--color-muted);
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.hero__footnote {
+  margin-top: 44px;
+  border-left: 2px solid var(--color-yellow);
+  padding-left: 14px;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+.hero__visual {
+  width: 100%;
+}
+
+.photo-frame--hero {
+  border-radius: 2px;
+}
+
+
+/* =========================================================
+   08. TENTANG RUUMAA
+   ========================================================= */
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(44px, 9vw, 140px);
+  border-top: 1px solid var(--color-line);
+}
+
+.about__visual {
+  width: min(100%, 410px);
+  justify-self: center;
+}
+
+.about__copy {
+  max-width: 480px;
+}
+
+.about__copy .eyebrow {
+  margin-bottom: 24px;
+}
+
+.about__copy h2 {
+  max-width: 10ch;
+  margin-bottom: 28px;
+}
+
+.about__copy > p:not(.eyebrow) {
+  max-width: 420px;
+  margin-top: 16px;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+
+.about__copy .text-link {
+  margin-top: 26px;
+}
+
+
+/* =========================================================
+   09. SUDUT RUUMAA
+   ========================================================= */
+
+.corners {
+  border-top: 1px solid var(--color-line);
+}
+
+.corners__wide {
+  margin-bottom: clamp(64px, 8vw, 120px);
+}
+
+/*
+   Bidang lebar dengan foto utuh di tengah.
+   Foto sumber hampir persegi, sehingga tidak dipaksa
+   menjadi foto panorama dan tidak memotong pengunjung.
+*/
+.photo-frame--wide {
+  display: flex;
+  min-height: 300px;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 3vw, 44px);
+}
+
+.photo-frame--wide .photo {
+  width: min(100%, 760px);
+}
+
+.corners__pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.75fr);
+  align-items: start;
+  gap: clamp(32px, 8vw, 120px);
+}
+
+.corners__coffee {
+  width: 100%;
+}
+
+.corners__detail {
+  width: 100%;
+  padding-top: clamp(44px, 9vw, 136px);
+}
+
+.detail-note {
+  max-width: 330px;
+  margin-top: 32px;
+}
+
+.detail-note .eyebrow {
+  margin-bottom: 14px;
+}
+
+.detail-note h3 {
+  margin-bottom: 16px;
+}
+
+.detail-note > p:last-child {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+
+/* =========================================================
+   10. JEDA VISUAL
+   ========================================================= */
+
+.visual-pause {
+  background: var(--color-soft);
+}
+
+.visual-pause__heading {
+  margin-bottom: 44px;
+  text-align: center;
+}
+
+.visual-pause__heading .eyebrow {
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.visual-pause__heading h2 {
+  max-width: 16ch;
+  margin-inline: auto;
+}
+
+.visual-pause__figure {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/*
+   Foto portrait tetap utuh di dalam bidang lebar.
+   Ukuran dibatasi sesuai resolusi asli.
+*/
+.photo-frame--pause {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  padding: clamp(18px, 4vw, 52px);
+  background: var(--color-paper);
+}
+
+.photo-frame--pause .photo {
+  width: min(100%, 440px);
+}
+
+.visual-pause__figure figcaption {
+  justify-content: center;
+  text-align: center;
+}
+
+
+/* =========================================================
+   11. GALERI
+   ========================================================= */
+
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(18px, 3vw, 40px);
+}
+
+.gallery__item--offset {
+  margin-top: clamp(48px, 8vw, 112px);
+}
+
+.gallery__link {
+  position: relative;
+  display: block;
+  min-width: 44px;
+  min-height: 44px;
+  background: var(--color-soft);
+}
+
+/*
+   Label ditempatkan di bawah foto, bukan menimpa
+   tulisan yang sudah ada di dalam gambar.
+*/
+.gallery__open {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-line);
+  border-top: 0;
+  padding: 10px 14px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  transition: background-color var(--transition-fast) ease;
+}
+
+.gallery__item figcaption {
+  margin-top: 12px;
+}
+
+.gallery__extras {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 32px;
+  margin-top: clamp(40px, 6vw, 80px);
+  border-top: 1px solid var(--color-line);
+  padding-top: 24px;
+}
+
+.gallery__extras > p {
+  max-width: 280px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.gallery__extra-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+}
+
+.gallery__extra-links .text-link {
+  font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   12. KUNJUNGI RUUMAA
+   ========================================================= */
+
+.visit {
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-soft);
+}
+
+.visit__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: start;
+  gap: clamp(40px, 7vw, 110px);
+}
+
+.visit__copy .eyebrow {
+  margin-bottom: 24px;
+}
+
+.visit__copy h2 {
+  font-size: clamp(2.75rem, 5.6vw, 5.75rem);
+}
+
+.visit__copy > p:last-child {
+  max-width: 340px;
+  margin-top: 28px;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+
+.visit__details {
+  padding-top: 6px;
+}
+
+.visit__information > div {
+  padding-block: 22px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.visit__information > div:first-child {
+  padding-top: 0;
+}
+
+.visit__information dt {
+  margin-bottom: 8px;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.visit__information dd {
+  font-size: clamp(1rem, 1.5vw, 1.1875rem);
+  font-weight: 600;
+  line-height: 1.65;
+}
+
+.visit__information dd a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.visit__actions {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+
+/* =========================================================
+   13. FOOTER DAN IKON SOSIAL
+   ========================================================= */
+
+.site-footer {
+  padding-top: clamp(48px, 6vw, 88px);
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+.site-footer__top {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.2fr)
+    minmax(0, 0.7fr)
+    minmax(0, 1fr);
+  align-items: start;
+  gap: 40px;
+}
+
+.brand-logo--footer {
+  width: 94px;
+}
+
+.site-footer__brand > p {
+  max-width: 220px;
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.footer-navigation {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.footer-navigation a,
+.site-footer__contact > a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding-block: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.site-footer__contact > p {
+  margin-bottom: 8px;
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+}
+
+.site-footer__contact > p:last-child {
+  max-width: 280px;
+  margin-top: 8px;
+}
+
+.site-footer__social-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 44px;
+  padding-bottom: 30px;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.social-link {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-pill);
+  padding: 11px 18px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition:
+    background-color var(--transition-fast) ease,
+    border-color var(--transition-fast) ease;
+}
+
+.social-link svg {
+  width: 21px;
+  height: 21px;
+}
+
+.back-to-top {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 16px;
+  padding-block: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.back-to-top > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: 50%;
+  transition: background-color var(--transition-fast) ease;
+}
+
+.site-footer__bottom {
+  border-top: 1px solid var(--color-line);
+  padding-top: 22px;
+}
+
+.site-footer__bottom small {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+}
+
+
+/* =========================================================
+   14. LOADER
+   ========================================================= */
+
+/*
+   Atribut hidden pada HTML membuat loader tidak terlihat
+   tanpa JavaScript. Animasi uap dan aksen dijalankan melalui
+   Web Animations API pada tahap JavaScript.
+*/
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  place-items: center;
+  padding: 24px;
+  background: var(--color-paper);
+
+  /* Loader dekoratif tidak menghalangi klik ketika tampil. */
+  pointer-events: none;
+}
+
+.preloader__inner {
+  display: flex;
+  width: min(100%, 280px);
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.preloader__logo {
+  width: 112px;
+  margin-bottom: 30px;
+}
+
+.preloader__cup {
+  width: 76px;
+  height: 76px;
+  color: var(--color-ink);
+}
+
+.preloader__steam {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.preloader__accent {
+  display: block;
+  width: 58px;
+  height: 4px;
+  margin-top: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--color-yellow);
+  transform-origin: center;
+}
+
+.preloader__text {
+  margin-top: 20px;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   15. LIGHTBOX
+   ========================================================= */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  padding: 0;
+  background: #171714;
+  color: var(--color-paper);
+}
+
+.lightbox::backdrop {
+  background: rgb(0 0 0 / 85%);
+}
+
+.lightbox__inner {
+  display: flex;
+  width: min(1200px, calc(100% - 48px));
+  min-height: 100%;
+  flex-direction: column;
+  margin-inline: auto;
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+}
+
+.lightbox__toolbar {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.lightbox__title {
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.lightbox__close {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid #5e5e52;
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  color: var(--color-paper);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lightbox__figure {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lightbox__image-wrap {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 180px;
+  place-items: center;
+}
+
+.lightbox__image {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 66vh;
+  max-height: 66dvh;
+  object-fit: contain;
+  object-position: center;
+}
+
+.lightbox__status {
+  max-width: 420px;
+  padding: 20px;
+  color: #deddd3;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.lightbox__status:empty {
+  display: none;
+}
+
+.lightbox__figure figcaption {
+  display: block;
+  max-width: 680px;
+  margin: 0;
+  color: #deddd3;
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.lightbox__controls {
+  display: grid;
+  width: min(100%, 560px);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  margin: 22px auto 0;
+}
+
+.lightbox__arrow {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid #5e5e52;
+  border-radius: var(--radius-small);
+  padding: 10px 14px;
+  color: var(--color-paper);
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition:
+    background-color var(--transition-fast) ease,
+    color var(--transition-fast) ease;
+}
+
+.lightbox__arrow > span[aria-hidden] {
+  font-size: 1.125rem;
+}
+
+.lightbox__counter {
+  min-width: 48px;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.lightbox__keyboard-hint {
+  margin-top: 16px;
+  color: #bdbcb0;
+  font-size: 0.6875rem;
+  text-align: center;
+}
+
+.lightbox__original {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  align-self: center;
+  margin-top: 8px;
+  padding: 8px 12px;
+  color: var(--color-paper);
+  font-size: 0.75rem;
+  text-decoration: underline;
+}
+
+.lightbox :where(a, button):focus-visible {
+  outline-color: var(--color-yellow);
+}
+
+
+/* =========================================================
+   16. REVEAL SAAT SCROLL
+   ========================================================= */
+
+/*
+   Konten normal selalu terlihat.
+   JS hanya menambahkan .reveal-ready setelah observer siap.
+*/
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal].reveal-ready {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 650ms var(--ease-out),
+    transform 650ms var(--ease-out);
+}
+
+[data-reveal].reveal-ready.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   17. HOVER — HANYA UNTUK PERANGKAT DENGAN POINTER
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+  .button--primary:hover {
+    background: var(--color-yellow-hover);
+    transform: translateY(-2px);
+  }
+
+  .button--text:hover {
+    border-color: var(--color-ink);
+    background: var(--color-soft);
+  }
+
+  .text-link:hover {
+    text-decoration-color: var(--color-ink);
+  }
+
+  .menu-toggle:hover,
+  .menu-close:hover,
+  .social-link:hover {
+    border-color: var(--color-yellow);
+    background: var(--color-yellow);
+  }
+
+  .basic-navigation a:hover,
+  .footer-navigation a:hover,
+  .navigation-panel__contact a:hover,
+  .site-footer__contact > a:hover {
+    text-decoration: underline;
+  }
+
+  .panel-navigation a:hover {
+    color: var(--color-focus);
+  }
+
+  /* Hover ringan, tanpa zoom atau filter pada foto. */
+  .gallery__link:hover .photo {
+    opacity: 0.96;
+  }
+
+  .gallery__link:hover .gallery__open {
+    background: var(--color-yellow);
+  }
+
+  .back-to-top:hover > span {
+    background: var(--color-yellow);
+  }
+
+  .lightbox__close:hover,
+  .lightbox__arrow:hover {
+    border-color: var(--color-yellow);
+    background: var(--color-yellow);
+    color: var(--color-ink);
+  }
+}
+
+
+/* =========================================================
+   18. TABLET DAN LAPTOP KECIL
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .hero {
+    gap: 32px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.75rem, 5.3vw, 4rem);
+  }
+
+  .hero__actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .about {
+    gap: 56px;
+  }
+
+  .corners__pair {
+    gap: 48px;
+  }
+
+  .visit__inner {
+    gap: 48px;
+  }
+
+  .site-footer__top {
+    gap: 28px;
+  }
+}
+
+
+/* =========================================================
+   19. TABLET PORTRAIT DAN PONSEL
+   ========================================================= */
+
+@media (max-width: 800px) {
+  :root {
+    --header-height: 80px;
+    --section-space: clamp(72px, 12vw, 100px);
+  }
+
+  .brand-logo {
+    width: 54px;
+  }
+
+  .site-header__note {
+    font-size: 0.6875rem;
+  }
+
+  .hero {
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+    padding-top: 42px;
+    padding-bottom: 72px;
+  }
+
+  .hero__copy {
+    max-width: 620px;
+  }
+
+  .hero h1 {
+    max-width: 12ch;
+    font-size: clamp(3rem, 8.4vw, 4.75rem);
+  }
+
+  .hero__description {
+    max-width: 360px;
+  }
+
+  .hero__actions {
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .hero__footnote {
+    margin-top: 28px;
+  }
+
+  .hero__visual {
+    max-width: 650px;
+    justify-self: center;
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .about__copy h2 {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+  }
+
+  .about__copy > p:not(.eyebrow) {
+    font-size: 0.875rem;
+  }
+
+  .corners__pair {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: 28px;
+  }
+
+  .section-heading--split {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .section-heading--split > p {
+    max-width: none;
+  }
+
+  .gallery__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 24px;
+  }
+
+  .gallery__item--offset {
+    margin-top: 64px;
+  }
+
+  .gallery__item:last-child {
+    grid-column: 1 / -1;
+    width: min(65%, 360px);
+    justify-self: center;
+    margin-top: 16px;
+  }
+
+  .gallery__extras {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .visit__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+
+  .visit__copy h2 {
+    font-size: clamp(3rem, 7.6vw, 4.5rem);
+  }
+
+  .visit__details {
+    max-width: 560px;
+  }
+
+  .site-footer__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+
+  .brand-logo--footer {
+    width: 82px;
+  }
+
+  .site-footer__brand > p {
+    max-width: none;
+    margin-top: 16px;
+  }
+}
+
+
+/* =========================================================
+   20. PONSEL KECIL — TERMASUK 320PX
+   ========================================================= */
+
+@media (max-width: 560px) {
+  :root {
+    --page-gutter: 20px;
+    --header-height: 76px;
+  }
+
+  h2 {
+    font-size: clamp(2.125rem, 9vw, 3rem);
+  }
+
+  .site-header__inner {
+    gap: 16px;
+  }
+
+  .site-header__note {
+    display: none;
+  }
+
+  .brand-logo {
+    width: 50px;
+  }
+
+  .menu-toggle,
+  .menu-close {
+    min-height: 46px;
+    gap: 12px;
+    padding-inline: 15px;
+  }
+
+  .basic-navigation {
+    gap: 0 16px;
+    padding-bottom: 10px;
+  }
+
+  .basic-navigation a {
+    font-size: 0.6875rem;
+  }
+
+  .hero {
+    gap: 32px;
+    padding-top: 30px;
+    padding-bottom: 64px;
+  }
+
+  .hero__copy .eyebrow {
+    margin-bottom: 24px;
+    font-size: 0.625rem;
+    letter-spacing: 0.085em;
+  }
+
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(2.5rem, 9.6vw, 3.4rem);
+    letter-spacing: -0.04em;
+  }
+
+  .hero__description {
+    max-width: 310px;
+    margin-top: 22px;
+    font-size: 0.9375rem;
+  }
+
+  .hero__actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 26px;
+  }
+
+  .hero__actions .button {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .hero__footnote {
+    font-size: 0.625rem;
+  }
+
+  figcaption {
+    gap: 10px;
+    font-size: 0.6875rem;
+  }
+
+  .hero__visual figcaption,
+  .corners__wide figcaption {
+    flex-wrap: wrap;
+  }
+
+  .photo-index {
+    font-size: 0.5625rem;
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .about__visual {
+    width: min(100%, 340px);
+    justify-self: start;
+  }
+
+  .about__copy {
+    max-width: none;
+  }
+
+  .about__copy h2 {
+    max-width: 12ch;
+    font-size: clamp(2.25rem, 9vw, 3rem);
+  }
+
+  .about__copy .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .about__copy > p:not(.eyebrow) {
+    max-width: none;
+    font-size: 0.9375rem;
+  }
+
+  .section-heading {
+    margin-bottom: 32px;
+  }
+
+  .section-heading .eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .section-heading h2 + p {
+    font-size: 0.875rem;
+  }
+
+  .photo-frame--wide {
+    min-height: 0;
+    padding: 10px;
+  }
+
+  .corners__wide {
+    margin-bottom: 48px;
+  }
+
+  .corners__pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 44px;
+  }
+
+  .corners__detail {
+    width: 86%;
+    justify-self: end;
+    padding-top: 0;
+  }
+
+  .detail-note {
+    margin-top: 24px;
+  }
+
+  .detail-note h3 {
+    font-size: 1.875rem;
+  }
+
+  .visual-pause__heading {
+    margin-bottom: 30px;
+    text-align: left;
+  }
+
+  .visual-pause__heading .eyebrow {
+    justify-content: flex-start;
+  }
+
+  .visual-pause__heading h2 {
+    max-width: none;
+    margin-inline: 0;
+    font-size: clamp(2rem, 8.5vw, 2.875rem);
+  }
+
+  .photo-frame--pause {
+    padding: 12px;
+  }
+
+  .visual-pause__figure figcaption {
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .gallery__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .gallery__item--tall {
+    width: 88%;
+  }
+
+  .gallery__item--offset {
+    width: 90%;
+    justify-self: end;
+    margin-top: 0;
+  }
+
+  .gallery__item:last-child {
+    grid-column: auto;
+    width: 88%;
+    justify-self: start;
+    margin-top: 0;
+  }
+
+  .gallery__extra-links {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .visit__copy h2 {
+    font-size: clamp(2.75rem, 11vw, 3.75rem);
+  }
+
+  .visit__copy > p:last-child {
+    margin-top: 22px;
+  }
+
+  .visit__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .visit__actions .button {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .site-footer__top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .site-footer__brand {
+    grid-column: auto;
+  }
+
+  .brand-logo--footer {
+    width: 78px;
+  }
+
+  .footer-navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 14px;
+  }
+
+  .site-footer__social-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .social-links {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .social-link {
+    flex: 1 1 120px;
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .back-to-top {
+    align-self: flex-end;
+  }
+
+  .navigation-panel__inner {
+    padding-top: 16px;
+  }
+
+  .navigation-panel__top .eyebrow {
+    font-size: 0.625rem;
+  }
+
+  .panel-navigation {
+    gap: 6px;
+    padding-block: 32px;
+  }
+
+  .panel-navigation a {
+    min-height: 52px;
+    gap: 16px;
+    font-size: clamp(1.875rem, 7.5vw, 2.5rem);
+  }
+
+  .panel-navigation a > span {
+    font-size: 0.5625rem;
+  }
+
+  .navigation-panel__bottom {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .navigation-panel__contact {
+    align-items: flex-start;
+  }
+
+  .navigation-panel__contact a {
+    font-size: 0.75rem;
+  }
+
+  .lightbox__inner {
+    width: calc(100% - 28px);
+  }
+
+  .lightbox__toolbar {
+    margin-bottom: 12px;
+  }
+
+  .lightbox__title {
+    font-size: 0.75rem;
+  }
+
+  .lightbox__close {
+    gap: 8px;
+    padding-inline: 12px;
+  }
+
+  .lightbox__image {
+    max-height: 62vh;
+    max-height: 62dvh;
+  }
+
+  .lightbox__figure figcaption {
+    font-size: 0.75rem;
+  }
+
+  .lightbox__controls {
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .lightbox__arrow {
+    gap: 6px;
+    padding-inline: 8px;
+    font-size: 0.625rem;
+  }
+
+  .lightbox__counter {
+    min-width: 38px;
+    font-size: 0.6875rem;
+  }
+
+  .lightbox__keyboard-hint {
+    max-width: 250px;
+    align-self: center;
+    font-size: 0.625rem;
+  }
+}
+
+
+/* =========================================================
+   21. LAYAR PENDEK / PONSEL LANDSCAPE
+   ========================================================= */
+
+@media (max-height: 600px) and (min-width: 561px) {
+  .navigation-panel__inner {
+    padding-top: 12px;
+  }
+
+  .panel-navigation {
+    gap: 0;
+    padding-block: 20px;
+  }
+
+  .panel-navigation a {
+    min-height: 44px;
+    font-size: 2rem;
+  }
+
+  .navigation-panel__bottom {
+    padding-top: 16px;
+  }
+
+  .lightbox__image {
+    max-height: 55vh;
+    max-height: 55dvh;
+  }
+}
+
+
+/* =========================================================
+   22. REDUCED MOTION
+   ========================================================= */
+
+/*
+   Pengguna yang mengurangi animasi tetap langsung
+   dapat membaca seluruh konten.
+   JS juga perlu memeriksa preferensi yang sama.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  [data-reveal],
+  [data-reveal].reveal-ready,
+  [data-reveal].reveal-ready.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .button:hover {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   23. CETAK
+   ========================================================= */
+
+@media print {
+  :root {
+    --section-space: 32px;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .site-header {
+    position: static;
+  }
+
+  .preloader,
+  .menu-toggle,
+  .basic-navigation,
+  .navigation-panel,
+  .lightbox,
+  .back-to-top,
+  .skip-link {
+    display: none !important;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  figure {
+    break-inside: avoid;
+  }
+
+  a {
+    color: black;
+  }
+}
