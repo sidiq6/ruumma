@@ -22,7 +22,6 @@
     content="Ruang untuk menikmati kopi, berbagi cerita, dan mengambil jeda. Buka 24 jam setiap hari."
   >
 
-  <!-- Font gratis. Fallback font akan ditentukan di style.css. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -30,7 +29,7 @@
     rel="stylesheet"
   >
 
-  <link rel="icon" type="image/jpeg" href="assets/107736.jpg">
+  <link rel="icon" type="image/jpeg" href="107736.jpg">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -40,11 +39,7 @@
     Lewati navigasi
   </a>
 
-  <!--
-    Loader tersembunyi secara default.
-    JavaScript mengaktifkannya dan menutupnya maksimal sekitar 2 detik.
-    Loader tidak perlu menunggu gambar galeri.
-  -->
+  <!-- Loader diaktifkan oleh JavaScript. -->
   <div
     class="preloader"
     id="preloader"
@@ -54,14 +49,13 @@
     <div class="preloader__inner">
       <img
         class="brand-logo preloader__logo"
-        src="assets/107736.jpg"
+        src="107736.jpg"
         alt=""
         width="1536"
         height="1501"
         decoding="async"
       >
 
-      <!-- Ilustrasi pendukung; bukan pengganti logo ruumaa. -->
       <svg
         class="preloader__cup"
         width="96"
@@ -95,7 +89,7 @@
       <a class="brand" href="#beranda" aria-label="ruumaa — beranda">
         <img
           class="brand-logo"
-          src="assets/107736.jpg"
+          src="107736.jpg"
           alt="ruumaa"
           width="1536"
           height="1501"
@@ -105,10 +99,6 @@
 
       <span class="site-header__note">Ada waktu untuk singgah.</span>
 
-      <!--
-        Tombol baru ditampilkan setelah navigasi JS siap.
-        Tanpa JS, navigasi biasa di bawah tetap dapat digunakan.
-      -->
       <button
         class="menu-toggle"
         id="menu-toggle"
@@ -127,7 +117,7 @@
       </button>
     </div>
 
-    <!-- JS menyembunyikan navigasi ini setelah panel siap digunakan. -->
+    <!-- Navigasi cadangan jika JavaScript tidak tersedia. -->
     <nav
       class="basic-navigation container"
       id="basic-navigation"
@@ -141,10 +131,6 @@
     </nav>
   </header>
 
-  <!--
-    Dialog native menjadi panel navigasi.
-    JS menangani Escape, fokus, scroll lock, dan perubahan ikon.
-  -->
   <dialog
     class="navigation-panel"
     id="navigation-panel"
@@ -213,7 +199,7 @@
   </dialog>
 
   <main id="main-content">
-    <!-- 01 / HERO: teks terpisah agar fasad dan pengunjung tetap terlihat. -->
+    <!-- HERO -->
     <section
       class="hero container"
       id="beranda"
@@ -253,7 +239,7 @@
           <img
             class="photo photo--facade"
             id="hero-image"
-            src="assets/107722.jpg"
+            src="107761.jpg"
             alt="Fasad ruumaa pada malam hari dengan pintu hijau muda dan pengunjung berkumpul di depannya."
             width="1536"
             height="1419"
@@ -269,7 +255,7 @@
       </figure>
     </section>
 
-    <!-- 02 / TENTANG -->
+    <!-- TENTANG -->
     <section
       class="about section-space container"
       id="tentang"
@@ -279,7 +265,7 @@
         <div class="photo-frame photo-frame--portrait">
           <img
             class="photo photo--daytime"
-            src="assets/107739.jpg"
+            src="107739.jpg"
             alt="Pengunjung berbincang di depan ruumaa, di samping pohon besar dan pintu hijau muda."
             width="863"
             height="1536"
@@ -310,7 +296,7 @@
       </div>
     </section>
 
-    <!-- 03 / SUDUT RUUMAA -->
+    <!-- SUDUT RUUMAA -->
     <section
       class="corners section-space container"
       id="sudut"
@@ -324,12 +310,11 @@
         </p>
       </div>
 
-      <!-- Bidang lebar; CSS mempertahankan foto utuh tanpa crop paksa. -->
       <figure class="corners__wide" data-reveal>
         <div class="photo-frame photo-frame--wide">
           <img
             class="photo photo--facade"
-            src="assets/107722.jpg"
+            src="107761.jpg"
             alt="Tampak depan ruumaa pada malam hari, dengan papan nama besar dan pengunjung di sekitar meja."
             width="1536"
             height="1419"
@@ -343,13 +328,12 @@
         </figcaption>
       </figure>
 
-      <!-- Sepasang foto berukuran berbeda, bukan kartu menu. -->
       <div class="corners__pair">
         <figure class="corners__coffee" data-reveal>
           <div class="photo-frame">
             <img
               class="photo photo--coffee"
-              src="assets/107725.jpg"
+              src="107760.jpg"
               alt="Secangkir kopi dengan latte art di atas meja, dikelilingi kerikil dan bayangan sinar matahari."
               width="1535"
               height="1536"
@@ -365,7 +349,7 @@
             <div class="photo-frame">
               <img
                 class="photo photo--drinks"
-                src="assets/107732.jpg"
+                src="107757.jpg"
                 alt="Gelas-gelas minuman bertutup oranye tersusun di atas meja kayu."
                 width="1229"
                 height="1536"
@@ -388,7 +372,7 @@
       </div>
     </section>
 
-    <!-- 04 / JEDA VISUAL: kalimat tidak menutupi tulisan bawaan foto. -->
+    <!-- JEDA VISUAL -->
     <section class="visual-pause section-space" aria-labelledby="pause-title">
       <div class="container">
         <div class="visual-pause__heading" data-reveal>
@@ -403,7 +387,7 @@
           <div class="photo-frame photo-frame--pause">
             <img
               class="photo photo--trees"
-              src="assets/107742.jpg"
+              src="107742.jpg"
               alt="Pengunjung duduk di meja-meja di bawah pepohonan pada malam hari, dengan lampu menerangi area berkerikil."
               width="866"
               height="1536"
@@ -416,7 +400,7 @@
       </div>
     </section>
 
-    <!-- 05 / GALERI -->
+    <!-- GALERI -->
     <section
       class="gallery section-space container"
       id="galeri"
@@ -432,24 +416,19 @@
         </p>
       </div>
 
-      <!--
-        Tautan tetap membuka gambar asli tanpa JavaScript.
-        JS menambahkan interaksi lightbox pada [data-lightbox].
-        Foto berikut memakai URL yang sama dengan foto sebelumnya,
-        sehingga tidak memerlukan unduhan gambar berbeda untuk thumbnail.
-      -->
+      <!-- href dan src menggunakan nama file yang sama. -->
       <div class="gallery__grid" aria-describedby="gallery-help">
         <figure class="gallery__item gallery__item--tall" data-reveal>
           <a
             class="gallery__link"
-            href="assets/107739.jpg"
+            href="107739.jpg"
             data-lightbox
             data-caption="Di depan ruumaa: pintu hijau muda, pepohonan, dan percakapan."
             aria-label="Perbesar foto fasad ruumaa dan pengunjung pada siang hari"
           >
             <img
               class="photo photo--daytime"
-              src="assets/107739.jpg"
+              src="107739.jpg"
               alt="Fasad ruumaa dengan pintu hijau muda, pohon besar, dan pengunjung yang berbincang."
               width="863"
               height="1536"
@@ -464,14 +443,14 @@
         <figure class="gallery__item gallery__item--offset" data-reveal>
           <a
             class="gallery__link"
-            href="assets/107725.jpg"
+            href="107760.jpg"
             data-lightbox
             data-caption="Kopi, latte art, dan bayangan di atas meja."
             aria-label="Perbesar foto kopi dengan latte art"
           >
             <img
               class="photo photo--coffee"
-              src="assets/107725.jpg"
+              src="107760.jpg"
               alt="Kopi dengan latte art di atas meja yang terkena cahaya matahari."
               width="1535"
               height="1536"
@@ -486,14 +465,14 @@
         <figure class="gallery__item gallery__item--tall" data-reveal>
           <a
             class="gallery__link"
-            href="assets/107742.jpg"
+            href="107742.jpg"
             data-lightbox
             data-caption="Pengunjung menikmati malam di bawah pepohonan."
             aria-label="Perbesar foto suasana malam di bawah pepohonan"
           >
             <img
               class="photo photo--trees"
-              src="assets/107742.jpg"
+              src="107742.jpg"
               alt="Meja-meja berisi pengunjung di bawah pepohonan pada malam hari."
               width="866"
               height="1536"
@@ -506,16 +485,12 @@
         </figure>
       </div>
 
-      <!--
-        Foto tambahan baru dimuat jika dibuka.
-        Tidak ada harga, kartu menu, atau tombol pemesanan.
-      -->
       <div class="gallery__extras" data-reveal>
         <p>Detail lain yang menemani kebersamaan:</p>
         <div class="gallery__extra-links">
           <a
             class="text-link"
-            href="assets/107728.jpg"
+            href="107728.jpg"
             data-lightbox
             data-alt="Tiga mangkuk berisi hidangan dengan telur dan sayuran di atas nampan."
             data-caption="Tiga mangkuk hidangan di atas nampan."
@@ -524,7 +499,7 @@
           </a>
           <a
             class="text-link"
-            href="assets/107730.jpg"
+            href="107730.jpg"
             data-lightbox
             data-alt="Dua piring nasi dengan telur dan kerupuk serta satu piring camilan di atas nampan."
             data-caption="Hidangan dan camilan dalam satu nampan."
@@ -535,7 +510,7 @@
       </div>
     </section>
 
-    <!-- 06 / KUNJUNGI -->
+    <!-- KUNJUNGI -->
     <section
       class="visit section-space"
       id="kunjungi"
@@ -604,7 +579,7 @@
           <a class="brand" href="#beranda" aria-label="ruumaa — kembali ke beranda">
             <img
               class="brand-logo brand-logo--footer"
-              src="assets/107736.jpg"
+              src="107736.jpg"
               alt="ruumaa"
               width="1536"
               height="1501"
@@ -629,7 +604,6 @@
         </div>
       </div>
 
-      <!-- Ikon berada dalam alur footer, bukan tombol mengambang. -->
       <div class="site-footer__social-row">
         <div class="social-links" aria-label="Media sosial ruumaa">
           <a
@@ -651,7 +625,13 @@
             >
               <rect x="3" y="3" width="18" height="18" rx="5"></rect>
               <circle cx="12" cy="12" r="4"></circle>
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
+              <circle
+                cx="17.5"
+                cy="6.5"
+                r="1"
+                fill="currentColor"
+                stroke="none"
+              ></circle>
             </svg>
             <span>Instagram</span>
           </a>
@@ -685,16 +665,14 @@
       </div>
 
       <div class="site-footer__bottom">
-        <!-- Tahun ini adalah fallback; JS menggantinya sesuai tahun saat dibuka. -->
-        <small>© <span id="current-year">2026</span> ruumaa. Semua hak dilindungi.</small>
+        <small>
+          © <span id="current-year">2026</span> ruumaa. Semua hak dilindungi.
+        </small>
       </div>
     </div>
   </footer>
 
-  <!--
-    Satu lightbox untuk seluruh tautan [data-lightbox].
-    Gambar besar dimasukkan JS hanya setelah pengguna membuka foto.
-  -->
+  <!-- LIGHTBOX -->
   <dialog
     class="lightbox"
     id="lightbox"
@@ -730,7 +708,7 @@
 
       <figure class="lightbox__figure">
         <div class="lightbox__image-wrap" id="lightbox-image-wrap">
-          <!-- Tanpa src awal agar tidak ada unduhan gambar tambahan. -->
+          <!-- Sumber gambar diisi JavaScript ketika foto dibuka. -->
           <img
             class="lightbox__image"
             id="lightbox-image"
